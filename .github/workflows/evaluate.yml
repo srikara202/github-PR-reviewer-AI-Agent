@@ -18,26 +18,26 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: us-east-1
+          aws-region: ap-southeast-2
 
       - uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push evaluate image
         env:
-          ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-southeast-2.amazonaws.com
         run: |
           docker build -t $ECR_REGISTRY/evaluate:latest -f scripts/Dockerfile .
           docker push $ECR_REGISTRY/evaluate:latest
 
       - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region us-east-1
+        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ap-southeast-2
 
       - name: Delete old job if exists
         run: kubectl delete job evaluate --ignore-not-found
 
       - name: Run evaluation job
         env:
-          ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-southeast-2.amazonaws.com
         run: |
           sed "s|IMAGE_PLACEHOLDER|$ECR_REGISTRY/evaluate:latest|g" infra/k8s/evaluate-job.yaml | kubectl apply -f -
 
