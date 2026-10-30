@@ -1534,7 +1534,9 @@ Swap POD_NAME for a real pod name from `kubectl get pods`.
 
 ## 21. How the Weekly Evaluation Works
 
-Every Monday at 9am UTC, GitHub Actions runs `scripts/evaluate.py` on its own. This checks the quality of the AI-generated review comments.
+Every Monday at 9am UTC, GitHub Actions was set to run `scripts/evaluate.py` on its own, to check the quality of the AI-generated review comments.
+
+**Status:** it never completed a run. All 13 scheduled runs from 2026-06-08 to 2026-08-31 failed, and GitHub has since disabled the workflow for inactivity.
 
 ### What It Does, Step by Step:
 
@@ -1543,7 +1545,7 @@ Every Monday at 9am UTC, GitHub Actions runs `scripts/evaluate.py` on its own. T
 3. Builds a dataset out of those findings
 4. Runs a RAGAS evaluation, which is a framework for measuring the quality of AI answers
 5. Checks two things:
-   - **Faithfulness:** are the comments actually grounded in the real code diff?
+   - **Faithfulness:** meant to check that the comments are grounded in the code. As written, the script passes only each finding's filename as the context, not the diff, so it cannot measure that yet.
    - **Answer Relevancy:** are the comments relevant to the question "what issues exist in this code?"
 6. Prints the scores
 7. If the faithfulness score drops below 0.7 (70%), the job fails and GitHub emails you a notification
@@ -1555,9 +1557,9 @@ Every Monday at 9am UTC, GitHub Actions runs `scripts/evaluate.py` on its own. T
 3. Click the most recent run
 4. Click the "evaluate" job
 5. Expand the "Run evaluation" step
-6. You will see output like:
+6. A completed run prints a line of this form (no run has printed one yet):
    ```
-   Mean faithfulness: 0.84
+   Mean faithfulness: <score>
    ```
 
 ### What to Do If It Fails:
