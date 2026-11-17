@@ -2,6 +2,7 @@
 
 This guide walks you all the way from an empty slate to a complete, live production system.
 Every command shown here is written for the Windows Command Prompt (CMD). To open CMD, press Win + R, type `cmd`, and press Enter.
+File paths in the commands assume the project folder is `C:\projects\ai-code-reviewer`. If yours is somewhere else, change that part of each path.
 Please work through the steps in the exact order they appear. Do not skip any of them.
 
 ---
@@ -403,7 +404,7 @@ This lets GitHub Actions deploy to AWS without you having to store long-lived AW
 Open CMD and run these commands one at a time:
 
 ```
-cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer"
+cd "C:\projects\ai-code-reviewer"
 ```
 
 ```
@@ -542,7 +543,7 @@ This step creates every AWS resource your system depends on: the Kubernetes clus
 ### 11.1 Open CMD and Go to the Terraform Folder
 
 ```
-cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\infra\terraform"
+cd "C:\projects\ai-code-reviewer\infra\terraform"
 ```
 
 ### 11.2 Initialize Terraform
@@ -707,7 +708,7 @@ This push touches every service folder, so all 5 pipelines start at the same tim
 
 ### 13.2 Watch the Pipelines Run
 
-1. Go to https://github.com/data-guru0/MAJOR-PROJECT-KRISH-SIR
+1. Go to https://github.com/YOUR_USERNAME/ai-code-reviewer
 2. Click the "Actions" tab at the top
 3. You will see **5 separate workflow runs** all kicking off together, one for each service
 4. Click any of them to watch it go
@@ -740,7 +741,7 @@ Once you finish Phase 12 (applying all the Kubernetes manifests), you have to ru
 Every service folder has a `deploy.txt` file made for exactly this. Bumping the number inside it triggers the pipelines without you having to touch any real code:
 
 ```
-cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer"
+cd "C:\projects\ai-code-reviewer"
 ```
 
 ```
@@ -826,7 +827,7 @@ This deploys all of your services onto the EKS cluster.
 
 First, get your Redis endpoint from Terraform:
 ```
-cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\infra\terraform"
+cd "C:\projects\ai-code-reviewer\infra\terraform"
 terraform output
 ```
 
@@ -837,7 +838,7 @@ ai-code-reviewer-redis.khmhzg.0001.use1.cache.amazonaws.com:6379
 
 Now open the ConfigMap file:
 ```
-notepad "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\infra\k8s\configmap.yaml"
+notepad "C:\projects\ai-code-reviewer\infra\k8s\configmap.yaml"
 ```
 
 Find this line:
@@ -864,7 +865,7 @@ You need to open `infra\k8s\secret.yaml` and put your real secret values into it
 Open CMD:
 
 ```
-notepad "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\infra\k8s\secret.yaml"
+notepad "C:\projects\ai-code-reviewer\infra\k8s\secret.yaml"
 ```
 
 Replace all the blank values with your real ones. When you are finished, the file should look like this:
@@ -899,7 +900,7 @@ stringData:
 ### 15.3 Go to the k8s Folder
 
 ```
-cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\infra\k8s"
+cd "C:\projects\ai-code-reviewer\infra\k8s"
 ```
 
 ### 15.4 Apply Everything in the Exact Order Below
@@ -1127,7 +1128,7 @@ Every pod should say `Running`. This can take a few minutes.
 Your project already includes a config file that tells Prometheus where to find all 5 services. Apply it:
 
 ```
-kubectl create configmap prometheus-config --from-file=prometheus.yml="D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\monitoring\prometheus.yml" -n monitoring --dry-run=client -o yaml | kubectl apply -f -
+kubectl create configmap prometheus-config --from-file=prometheus.yml="C:\projects\ai-code-reviewer\monitoring\prometheus.yml" -n monitoring --dry-run=client -o yaml | kubectl apply -f -
 ```
 
 ### 16.5 Install Grafana
@@ -1220,7 +1221,7 @@ Your project already includes a complete Grafana dashboard saved as a JSON file.
 1. In Grafana, click the "+" icon in the left sidebar
 2. Click "Import"
 3. Click "Upload JSON file"
-4. Browse to `D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\monitoring\grafana-dashboard.json`
+4. Browse to `C:\projects\ai-code-reviewer\monitoring\grafana-dashboard.json`
 5. Select the Prometheus data source you just added
 6. Click "Import"
 
@@ -1367,7 +1368,7 @@ Every pod has to say `Running`. If any say `Pending` or `CrashLoopBackOff`, wait
 Bump the deploy.txt files to set off all the pipelines:
 
 ```
-cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer"
+cd "C:\projects\ai-code-reviewer"
 ```
 
 ```
@@ -1708,7 +1709,7 @@ aws eks update-kubeconfig --name ai-code-reviewer --region us-east-1
 
 **To pause the system and stop all charges:**
 ```
-cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\infra\terraform"
+cd "C:\projects\ai-code-reviewer\infra\terraform"
 terraform destroy -var="cluster_name=ai-code-reviewer" -var="db_password=YourStrongPassword123!"
 ```
 Type `yes` when it asks. This deletes everything on AWS. You can bring it all back later with `terraform apply`.
@@ -1756,7 +1757,7 @@ Scale a service:
   kubectl scale deployment orchestrator --replicas=4
 
 Shut down everything (stop AWS charges):
-  cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\infra\terraform"
+  cd "C:\projects\ai-code-reviewer\infra\terraform"
   terraform destroy -var="cluster_name=ai-code-reviewer" -var="db_password=YourStrongPassword123!" -var="environment=production"
 ```
 
@@ -1769,7 +1770,7 @@ Run this whenever you want to shut everything down and stop all AWS charges.
 ### 25.1 Destroy All the AWS Infrastructure
 
 ```
-cd "D:\MAJOR PROJECT KRISH SIR\ai-code-reviewer\infra\terraform"
+cd "C:\projects\ai-code-reviewer\infra\terraform"
 ```
 
 ```
